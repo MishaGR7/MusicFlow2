@@ -2,6 +2,8 @@
 
 A web-based platform designed to track new music releases, manage favorite artists, and discover new albums. This project features a robust system for music enthusiasts to stay updated with their favorite creators.
 
+Project Theme: Web platform for announcing releases of musical groups and artists.
+
 ## ✨ Key Features
 
 *   **Search Engine:** Find artists, albums, and specific releases within the database.
