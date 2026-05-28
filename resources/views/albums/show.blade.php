@@ -14,6 +14,7 @@
             </p>
             <p class="mt-2 text-sm text-slate-400">Release date: {{ $album->release_label }}</p>
             <p class="mt-2 text-sm text-slate-400">Country: {{ $album->artist->country ?? 'Unknown' }}</p>
+            <p class="mt-2 text-sm text-slate-400">Tracks: {{ $album->tracks->count() }}</p>
 
             @auth
                 <form method="POST" action="{{ route('favorites.toggle', $album->artist) }}" class="mt-6">
@@ -23,4 +24,23 @@
             @endif
         </div>
     </article>
+
+    <section class="mt-10 rounded-2xl border border-slate-800 bg-slate-900/70 p-6">
+        <h2 class="text-2xl font-bold text-white">Track list</h2>
+
+        <div class="mt-5 divide-y divide-slate-800">
+            @forelse($album->tracks as $track)
+                <div class="grid gap-3 py-3 text-sm md:grid-cols-[56px_minmax(0,1fr)_120px_140px] md:items-center">
+                    <p class="font-semibold text-slate-500">#{{ $track->position }}</p>
+                    <p class="text-slate-100">{{ $track->title }}</p>
+                    <p class="text-slate-400">{{ $track->duration ?: '-' }}</p>
+                    @if($track->is_title_track)
+                        <span class="w-fit rounded-full bg-violet-900/50 px-3 py-1 text-xs font-semibold text-violet-200">Title track</span>
+                    @endif
+                </div>
+            @empty
+                <p class="mt-4 text-slate-400">Track list has not been added yet.</p>
+            @endforelse
+        </div>
+    </section>
 @endsection

@@ -12,7 +12,7 @@ class HomeController extends Controller
     public function index(Request $request): View
     {
         return view('home', [
-            'latestAlbums' => Album::with('artist')->latest()->take(6)->get(),
+            'latestAlbums' => Album::with('artist')->withCount('tracks')->latest()->take(6)->get(),
             'featuredArtists' => Artist::withCount(['albums', 'followers'])->orderBy('name')->take(6)->get(),
             'stats' => [
                 'albums' => Album::count(),

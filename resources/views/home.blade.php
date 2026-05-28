@@ -49,6 +49,7 @@
                         <div>
                             <p class="text-xl font-semibold text-white">{{ $album->title }}</p>
                             <p class="text-sm text-slate-400">{{ $album->artist->name }} · {{ $album->release_label }}</p>
+                            <p class="mt-1 text-sm text-slate-500">{{ $album->tracks_count }} tracks</p>
                         </div>
                         <span class="music-badge music-badge-{{ $album->status }}">{{ strtoupper($album->status) }}</span>
                     </div>
@@ -74,7 +75,7 @@
                 <article class="music-card">
                     <img src="{{ $artist->photo ? asset('storage/' . $artist->photo) : 'https://placehold.co/800x800/020617/a78bfa?text=Artist' }}" alt="{{ $artist->name }}" class="h-56 w-full rounded-xl object-cover" />
                     <h3 class="mt-4 text-xl font-semibold text-white">{{ $artist->name }}</h3>
-                    <p class="mt-1 text-sm text-slate-400">{{ $artist->country ?: 'Unknown country' }}</p>
+                    <p class="mt-1 text-sm text-slate-400">{{ $artist->country ?: 'Unknown country' }} · {{ $artist->company ?: 'No company listed' }}</p>
                     <p class="mt-3 text-sm text-slate-300">{{ $artist->albums_count }} releases · {{ $artist->followers_count }} followers</p>
                     <a href="{{ route('artists.show', $artist) }}" class="mt-4 inline-flex text-sm text-violet-300 hover:text-violet-200">Open artist page</a>
                 </article>

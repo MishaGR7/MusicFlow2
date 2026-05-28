@@ -51,6 +51,10 @@
                     <span class="music-badge music-badge-{{ $album->status }}">{{ strtoupper($album->status) }}</span>
                 </div>
                 <p class="mt-2 text-xs text-slate-500">Release: {{ $album->release_label }}</p>
+                <p class="mt-2 text-sm text-slate-300">{{ $album->tracks_count }} tracks</p>
+                @if($album->titleTrack)
+                    <p class="text-sm text-violet-300">Title track: {{ $album->titleTrack->title }}</p>
+                @endif
 
                 <div class="mt-4 flex flex-wrap gap-3">
                     <a href="{{ route('albums.show', $album) }}" class="music-btn-secondary">View</a>

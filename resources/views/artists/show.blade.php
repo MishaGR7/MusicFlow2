@@ -7,10 +7,35 @@
         </div>
 
         <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6">
-            <p class="text-sm uppercase tracking-[0.3em] text-violet-300">{{ $artist->country ?: 'Unknown country' }}</p>
+            <p class="text-sm uppercase tracking-[0.3em] text-violet-300">{{ $artist->country ?: 'Unknown country' }} · {{ ucfirst($artist->artist_type ?? 'group') }}</p>
             <h1 class="mt-3 text-4xl font-bold text-white">{{ $artist->name }}</h1>
             <p class="mt-4 max-w-3xl text-slate-300">{{ $artist->bio ?: 'Biography will appear here after the artist is updated by an administrator.' }}</p>
-            <p class="mt-4 text-sm text-slate-400">{{ $artist->followers->count() }} followers</p>
+
+            <dl class="mt-6 grid gap-4 text-sm md:grid-cols-2">
+                <div class="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+                    <dt class="text-slate-500">Company</dt>
+                    <dd class="mt-1 text-slate-200">{{ $artist->company ?: 'Unknown' }}</dd>
+                </div>
+                <div class="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+                    <dt class="text-slate-500">Debut</dt>
+                    <dd class="mt-1 text-slate-200">{{ $artist->debut_date ? $artist->debut_date->format('d M Y') : 'Unknown' }}</dd>
+                </div>
+                <div class="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+                    <dt class="text-slate-500">Members</dt>
+                    <dd class="mt-1 text-slate-200">{{ $artist->members_count ?: 'Unknown' }}</dd>
+                </div>
+                <div class="rounded-xl border border-slate-800 bg-slate-950/60 p-4">
+                    <dt class="text-slate-500">Fandom</dt>
+                    <dd class="mt-1 text-slate-200">{{ $artist->fandom_name ?: 'Unknown' }}</dd>
+                </div>
+            </dl>
+
+            <div class="mt-4 flex flex-wrap items-center gap-4 text-sm text-slate-400">
+                <p>{{ $artist->followers->count() }} followers</p>
+                @if($artist->official_site)
+                    <a href="{{ $artist->official_site }}" target="_blank" rel="noopener" class="text-violet-300 hover:text-violet-200">Official site</a>
+                @endif
+            </div>
 
             @auth
                 <form method="POST" action="{{ route('favorites.toggle', $artist) }}" class="mt-6">
@@ -34,7 +59,7 @@
                     <div class="mt-4 flex items-start justify-between gap-4">
                         <div>
                             <h3 class="text-lg font-semibold text-white">{{ $album->title }}</h3>
-                            <p class="text-sm text-slate-400">{{ $album->release_label }}</p>
+                            <p class="text-sm text-slate-400">{{ $album->release_label }} · {{ $album->tracks_count }} tracks</p>
                         </div>
                         <span class="music-badge music-badge-{{ $album->status }}">{{ strtoupper($album->status) }}</span>
                     </div>

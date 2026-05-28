@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[Fillable(['artist_id', 'title', 'release_date', 'status', 'cover'])]
 class Album extends Model
@@ -75,5 +77,15 @@ class Album extends Model
     public function artist(): BelongsTo
     {
         return $this->belongsTo(Artist::class);
+    }
+
+    public function tracks(): HasMany
+    {
+        return $this->hasMany(AlbumTrack::class)->orderBy('position');
+    }
+
+    public function titleTrack(): HasOne
+    {
+        return $this->hasOne(AlbumTrack::class)->where('is_title_track', true);
     }
 }

@@ -16,7 +16,8 @@ class AlbumController extends Controller
         $onlyFavorites = $request->boolean('favorites');
 
         $albums = Album::query()
-            ->with(['artist', 'artist.followers'])
+            ->with(['artist', 'artist.followers', 'titleTrack'])
+            ->withCount('tracks')
             ->when($status, fn ($query) => $query->where('status', $status))
             ->when($country, fn ($query) => $query->whereHas('artist', fn ($artistQuery) => $artistQuery->where('country', $country)))
             ->when($search, function ($query) use ($search) {
@@ -56,7 +57,7 @@ class AlbumController extends Controller
 
     public function show(Album $album): View
     {
-        $album->load('artist');
+        $album->load(['artist', 'tracks']);
 
         return view('albums.show', compact('album'));
     }

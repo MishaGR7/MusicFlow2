@@ -12,6 +12,8 @@
                 <img src="{{ $album->cover ? asset('storage/' . $album->cover) : 'https://placehold.co/500x500/0f172a/a78bfa?text=Album' }}" class="h-48 w-full rounded-xl object-cover" alt="{{ $album->title ?: 'Untitled Album' }}" />
                 <h2 class="mt-3 text-xl font-semibold text-white">{{ $album->title ?: 'Untitled Album' }}</h2>
                 <p class="text-sm text-slate-400">{{ $album->artist->name }}</p>
+                <p class="mt-2 text-sm text-slate-300">{{ $album->tracks_count }} tracks</p>
+                <p class="text-sm text-slate-400">Title track: {{ $album->titleTrack->title ?? 'Not selected' }}</p>
                 <div class="mt-4 flex gap-2">
                     <a href="{{ route('admin.albums.edit', $album) }}" class="music-btn-secondary">Edit</a>
                     <form method="POST" action="{{ route('admin.albums.destroy', $album) }}">
