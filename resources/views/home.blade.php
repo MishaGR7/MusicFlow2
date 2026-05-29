@@ -53,7 +53,7 @@
                         </div>
                         <span class="music-badge music-badge-{{ $album->status }}">{{ strtoupper($album->status) }}</span>
                     </div>
-                    <a href="{{ route('albums.show', $album) }}" class="mt-4 inline-flex text-sm text-violet-300 hover:text-violet-200">Open release</a>
+                    <a href="{{ route('albums.show', $album) }}" class="music-btn-secondary mt-4">Open release</a>
                 </article>
             @empty
                 <p class="text-slate-400">No releases yet.</p>
@@ -77,7 +77,7 @@
                     <h3 class="mt-4 text-xl font-semibold text-white">{{ $artist->name }}</h3>
                     <p class="mt-1 text-sm text-slate-400">{{ $artist->country ?: 'Unknown country' }} · {{ $artist->company ?: 'No company listed' }}</p>
                     <p class="mt-3 text-sm text-slate-300">{{ $artist->albums_count }} releases · {{ $artist->followers_count }} followers</p>
-                    <a href="{{ route('artists.show', $artist) }}" class="mt-4 inline-flex text-sm text-violet-300 hover:text-violet-200">Open artist page</a>
+                    <a href="{{ route('artists.show', $artist) }}" class="music-btn-secondary mt-4">Open artist page</a>
                 </article>
             @empty
                 <p class="text-slate-400">No artists yet.</p>

@@ -2,8 +2,10 @@
 
 @section('content')
     <article class="grid gap-8 lg:grid-cols-[320px_minmax(0,1fr)]">
-        <div class="music-card">
-            <img src="{{ $album->cover ? asset('storage/' . $album->cover) : 'https://placehold.co/800x800/0f172a/a78bfa?text=Album' }}" alt="{{ $album->title }}" class="h-full w-full rounded-xl object-cover" />
+        <div class="music-detail-media">
+            <div class="music-detail-image-frame">
+                <img src="{{ $album->cover ? asset('storage/' . $album->cover) : 'https://placehold.co/800x800/0f172a/a78bfa?text=Album' }}" alt="{{ $album->title }}" class="music-detail-image" />
+            </div>
         </div>
 
         <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6">

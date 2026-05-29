@@ -1,4 +1,4 @@
-<nav class="flex items-center gap-4 text-sm">
+<nav class="flex flex-wrap items-center justify-end gap-2 text-sm sm:gap-4">
     <a class="music-nav-link" href="{{ route('home') }}">Home</a>
     <a class="music-nav-link" href="{{ route('albums.index') }}">Releases</a>
     <a class="music-nav-link" href="{{ route('artists.index') }}">Artists</a>

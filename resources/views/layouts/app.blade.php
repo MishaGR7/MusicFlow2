@@ -11,7 +11,7 @@
 <body class="music-body">
     <div class="min-h-screen bg-slate-950/95 text-slate-100">
         <header class="border-b border-slate-800 bg-slate-950/95 backdrop-blur">
-            <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+            <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:flex-nowrap sm:px-6 lg:px-8">
                 <a href="{{ route('home') }}" class="text-2xl font-semibold tracking-wide text-violet-400">MusicFlow</a>
                 @include('layouts.navigation')
             </div>

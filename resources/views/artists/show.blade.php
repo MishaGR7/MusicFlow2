@@ -2,8 +2,10 @@
 
 @section('content')
     <section class="grid gap-8 lg:grid-cols-[320px_minmax(0,1fr)]">
-        <div class="music-card">
-            <img src="{{ $artist->photo ? asset('storage/' . $artist->photo) : 'https://placehold.co/800x800/020617/a78bfa?text=Artist' }}" alt="{{ $artist->name }}" class="h-full w-full rounded-xl object-cover" />
+        <div class="music-detail-media">
+            <div class="music-detail-image-frame">
+                <img src="{{ $artist->photo ? asset('storage/' . $artist->photo) : 'https://placehold.co/800x800/020617/a78bfa?text=Artist' }}" alt="{{ $artist->name }}" class="music-detail-image" />
+            </div>
         </div>
 
         <div class="rounded-2xl border border-slate-800 bg-slate-900/70 p-6">
@@ -63,7 +65,7 @@
                         </div>
                         <span class="music-badge music-badge-{{ $album->status }}">{{ strtoupper($album->status) }}</span>
                     </div>
-                    <a href="{{ route('albums.show', $album) }}" class="mt-4 inline-flex text-sm text-violet-300 hover:text-violet-200">Open release</a>
+                    <a href="{{ route('albums.show', $album) }}" class="music-btn-secondary mt-4">Open release</a>
                 </article>
             @empty
                 <p class="text-slate-400">This artist has no releases yet.</p>
