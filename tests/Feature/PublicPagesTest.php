@@ -17,6 +17,8 @@ class PublicPagesTest extends TestCase
             'name' => 'Ocean Echo',
             'country' => 'Ukraine',
             'bio' => 'Indie project for testing.',
+            'spotify_url' => 'https://open.spotify.com/artist/ocean-echo',
+            'instagram_url' => 'https://www.instagram.com/ocean.echo/',
         ]);
 
         $album = Album::create([
@@ -24,6 +26,7 @@ class PublicPagesTest extends TestCase
             'title' => 'Midnight Signal',
             'release_date' => '2026-05',
             'status' => 'announced',
+            'spotify_url' => 'https://open.spotify.com/album/midnight-signal',
         ]);
 
         $this->get('/')
@@ -39,6 +42,8 @@ class PublicPagesTest extends TestCase
         $this->get("/artists/{$artist->id}")
             ->assertOk()
             ->assertSee($artist->name)
+            ->assertSee('Spotify')
+            ->assertSee('Instagram')
             ->assertSee($album->title);
 
         $this->get('/releases')
@@ -48,6 +53,7 @@ class PublicPagesTest extends TestCase
         $this->get("/releases/{$album->id}")
             ->assertOk()
             ->assertSee($album->title)
+            ->assertSee('Open on Spotify')
             ->assertSee($artist->name);
     }
 }

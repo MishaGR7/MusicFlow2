@@ -12,6 +12,8 @@
     <input class="music-input w-full" type="number" name="members_count" value="{{ old('members_count', $artist->members_count ?? '') }}" placeholder="Members count" min="1" max="200" />
     <input class="music-input w-full" name="fandom_name" value="{{ old('fandom_name', $artist->fandom_name ?? '') }}" placeholder="Fandom name" />
     <input class="music-input w-full" type="url" name="official_site" value="{{ old('official_site', $artist->official_site ?? '') }}" placeholder="Official site https://..." />
+    <input class="music-input w-full" type="url" name="spotify_url" value="{{ old('spotify_url', $artist->spotify_url ?? '') }}" placeholder="Spotify artist URL https://open.spotify.com/artist/..." />
+    <input class="music-input w-full" type="url" name="instagram_url" value="{{ old('instagram_url', $artist->instagram_url ?? '') }}" placeholder="Instagram URL https://www.instagram.com/..." />
     <textarea class="music-input w-full md:col-span-2" name="bio" rows="8" placeholder="Detailed biography, history, achievements, concept, notes">{{ old('bio', $artist->bio ?? '') }}</textarea>
     <input class="music-input w-full md:col-span-2" type="file" name="photo" accept="image/*" />
 </div>

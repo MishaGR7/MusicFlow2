@@ -26,6 +26,8 @@ class AdminArtistDetailsTest extends TestCase
                 'members_count' => 5,
                 'fandom_name' => 'Travelers',
                 'official_site' => 'https://example.com/lunar-route',
+                'spotify_url' => 'https://open.spotify.com/artist/example',
+                'instagram_url' => 'https://www.instagram.com/lunar.route/',
             ])
             ->assertRedirect('/admin/artists');
 
@@ -35,6 +37,8 @@ class AdminArtistDetailsTest extends TestCase
             'artist_type' => 'group',
             'members_count' => 5,
             'fandom_name' => 'Travelers',
+            'spotify_url' => 'https://open.spotify.com/artist/example',
+            'instagram_url' => 'https://www.instagram.com/lunar.route/',
         ]);
     }
 

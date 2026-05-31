@@ -103,6 +103,8 @@ class AdminArtistController extends Controller
             'members_count' => ['nullable', 'integer', 'min:1', 'max:200'],
             'fandom_name' => ['nullable', 'string', 'max:255'],
             'official_site' => ['nullable', 'url', 'max:255'],
+            'spotify_url' => ['nullable', 'url', 'max:255'],
+            'instagram_url' => ['nullable', 'url', 'max:255'],
             'photo' => ['nullable', 'image', 'max:3072'],
         ]);
     }

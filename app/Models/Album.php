@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-#[Fillable(['artist_id', 'title', 'release_date', 'status', 'cover'])]
+#[Fillable(['artist_id', 'title', 'release_date', 'status', 'cover', 'spotify_url'])]
 class Album extends Model
 {
     protected function casts(): array

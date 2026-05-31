@@ -17,11 +17,36 @@ use Illuminate\Validation\ValidationException;
 
 class AdminAlbumController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $albums = Album::with(['artist', 'titleTrack'])->withCount('tracks')->latest()->paginate(12);
+        $search = $request->string('q')->toString();
+        $status = $request->string('status')->toString();
+        $artistId = $request->integer('artist_id') ?: null;
 
-        return view('admin.albums.index', compact('albums'));
+        $albums = Album::query()
+            ->with(['artist', 'titleTrack'])
+            ->withCount('tracks')
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($subQuery) use ($search) {
+                    $subQuery
+                        ->where('title', 'like', "%{$search}%")
+                        ->orWhereHas('artist', fn ($artistQuery) => $artistQuery->where('name', 'like', "%{$search}%"));
+                });
+            })
+            ->when($status, fn ($query) => $query->where('status', $status))
+            ->when($artistId, fn ($query) => $query->where('artist_id', $artistId))
+            ->latest()
+            ->paginate(12)
+            ->withQueryString();
+
+        $artists = Artist::orderBy('name')->get();
+
+        return view('admin.albums.index', [
+            'albums' => $albums,
+            'artists' => $artists,
+            'statuses' => ['published', 'announced', 'soon', 'tba'],
+            'filters' => compact('search', 'status', 'artistId'),
+        ]);
     }
 
     public function create(): View
@@ -127,6 +152,7 @@ class AdminAlbumController extends Controller
                 'max:31',
             ],
             'cover' => ['nullable', 'image', 'max:3072'],
+            'spotify_url' => ['nullable', 'url', 'max:255'],
         ]);
 
         $year = isset($validated['release_year']) ? (int) $validated['release_year'] : null;

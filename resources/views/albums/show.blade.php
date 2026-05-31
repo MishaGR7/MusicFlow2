@@ -18,6 +18,10 @@
             <p class="mt-2 text-sm text-slate-400">Country: {{ $album->artist->country ?? 'Unknown' }}</p>
             <p class="mt-2 text-sm text-slate-400">Tracks: {{ $album->tracks->count() }}</p>
 
+            @if($album->spotify_url)
+                <a href="{{ $album->spotify_url }}" target="_blank" rel="noopener" class="music-btn-secondary mt-6 inline-flex">Open on Spotify</a>
+            @endif
+
             @auth
                 <form method="POST" action="{{ route('favorites.toggle', $album->artist) }}" class="mt-6">
                     @csrf

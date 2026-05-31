@@ -32,7 +32,14 @@
                             <a href="{{ route('profile.edit') }}" class="text-violet-200 underline underline-offset-4">Open profile</a>
                         </div>
                         @foreach(auth()->user()->unreadNotifications as $notification)
-                            <p>{{ $notification->data['message'] ?? 'New album update.' }}</p>
+                            <p>
+                                {{ $notification->data['message'] ?? 'New album update.' }}
+                                @if(! empty($notification->data['action_url']))
+                                    <a href="{{ $notification->data['action_url'] }}" class="ml-2 text-violet-200 underline underline-offset-4">
+                                        {{ $notification->data['action_label'] ?? 'Open' }}
+                                    </a>
+                                @endif
+                            </p>
                         @endforeach
                     </div>
                 @endif

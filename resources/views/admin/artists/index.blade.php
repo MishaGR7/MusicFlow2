@@ -39,7 +39,7 @@
                 <p class="mt-2 line-clamp-3 text-sm text-slate-300">{{ $artist->bio ?: 'No biography yet.' }}</p>
                 <div class="mt-4 flex gap-2">
                     <a href="{{ route('admin.artists.edit', $artist) }}" class="music-btn-secondary">Edit</a>
-                    <form method="POST" action="{{ route('admin.artists.destroy', $artist) }}">
+                    <form method="POST" action="{{ route('admin.artists.destroy', $artist) }}" onsubmit="return confirm('Delete this artist? This action cannot be undone.');">
                         @csrf
                         @method('DELETE')
                         <button class="rounded-lg border border-rose-700 px-3 py-2 text-sm text-rose-300 hover:bg-rose-900/20">Delete</button>

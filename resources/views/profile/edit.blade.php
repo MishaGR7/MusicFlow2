@@ -71,10 +71,19 @@
             <div class="space-y-3">
                 @forelse($user->notifications as $notification)
                     <article class="rounded-xl border px-4 py-3 text-sm {{ $notification->read_at ? 'border-slate-800 bg-slate-950/70 text-slate-400' : 'border-violet-800 bg-violet-950/40 text-violet-100' }}">
-                        <p>{{ $notification->data['message'] ?? 'New release update.' }}</p>
-                        <p class="mt-2 text-xs {{ $notification->read_at ? 'text-slate-500' : 'text-violet-300' }}">
-                            {{ $notification->created_at->diffForHumans() }}
-                        </p>
+                        <div class="flex flex-wrap items-start justify-between gap-3">
+                            <div>
+                                <p class="font-medium">{{ $notification->data['message'] ?? 'New release update.' }}</p>
+                                <p class="mt-2 text-xs {{ $notification->read_at ? 'text-slate-500' : 'text-violet-300' }}">
+                                    {{ $notification->created_at->diffForHumans() }}
+                                </p>
+                            </div>
+                            @if(! empty($notification->data['action_url']))
+                                <a href="{{ $notification->data['action_url'] }}" class="text-xs font-semibold text-violet-300 hover:text-violet-200">
+                                    {{ $notification->data['action_label'] ?? 'Open' }}
+                                </a>
+                            @endif
+                        </div>
                     </article>
                 @empty
                     <p class="text-slate-400">No notifications yet.</p>

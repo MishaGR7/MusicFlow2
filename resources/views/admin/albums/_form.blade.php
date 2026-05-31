@@ -48,6 +48,7 @@
             <option value="{{ $status }}" @selected(old('status', $album->status ?? 'tba') === $status)>{{ ucfirst($status) }}</option>
         @endforeach
     </select>
+    <input class="music-input w-full md:col-span-2" type="url" name="spotify_url" value="{{ old('spotify_url', $album->spotify_url ?? '') }}" placeholder="Spotify album URL https://open.spotify.com/album/..." />
     <input class="music-input w-full md:col-span-2" type="file" name="cover" accept="image/*" />
 </div>
 

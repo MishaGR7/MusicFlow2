@@ -49,12 +49,14 @@ class AdminAlbumWorkflowTest extends TestCase
                 'status' => 'announced',
                 'release_year' => 2027,
                 'release_month' => 5,
+                'spotify_url' => 'https://open.spotify.com/album/example',
             ])
             ->assertRedirect('/admin/albums');
 
         $album = Album::firstOrFail();
 
         $this->assertSame('2027-05', $album->release_date);
+        $this->assertSame('https://open.spotify.com/album/example', $album->spotify_url);
 
         Notification::assertSentTo($listener, NewAlbumAdded::class);
     }
@@ -109,5 +111,37 @@ class AdminAlbumWorkflowTest extends TestCase
 
         $this->assertDatabaseCount('albums', 0);
         $this->assertDatabaseCount('album_tracks', 0);
+    }
+
+    public function test_admin_can_filter_albums_by_search_status_and_artist(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $visibleArtist = Artist::create(['name' => 'Filter Lights']);
+        $hiddenArtist = Artist::create(['name' => 'Archive Noise']);
+
+        Album::create([
+            'artist_id' => $visibleArtist->id,
+            'title' => 'Crystal Map',
+            'status' => 'announced',
+        ]);
+
+        Album::create([
+            'artist_id' => $visibleArtist->id,
+            'title' => 'Crystal Map Demo',
+            'status' => 'published',
+        ]);
+
+        Album::create([
+            'artist_id' => $hiddenArtist->id,
+            'title' => 'Hidden Static',
+            'status' => 'announced',
+        ]);
+
+        $this->actingAs($admin)
+            ->get("/admin/albums?q=Crystal&status=announced&artist_id={$visibleArtist->id}")
+            ->assertOk()
+            ->assertSee('Crystal Map')
+            ->assertDontSee('Crystal Map Demo')
+            ->assertDontSee('Hidden Static');
     }
 }

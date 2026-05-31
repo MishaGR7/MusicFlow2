@@ -37,6 +37,12 @@
                 @if($artist->official_site)
                     <a href="{{ $artist->official_site }}" target="_blank" rel="noopener" class="text-violet-300 hover:text-violet-200">Official site</a>
                 @endif
+                @if($artist->spotify_url)
+                    <a href="{{ $artist->spotify_url }}" target="_blank" rel="noopener" class="text-violet-300 hover:text-violet-200">Spotify</a>
+                @endif
+                @if($artist->instagram_url)
+                    <a href="{{ $artist->instagram_url }}" target="_blank" rel="noopener" class="text-violet-300 hover:text-violet-200">Instagram</a>
+                @endif
             </div>
 
             @auth

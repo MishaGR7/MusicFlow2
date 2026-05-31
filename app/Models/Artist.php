@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'members_count',
     'fandom_name',
     'official_site',
+    'spotify_url',
+    'instagram_url',
     'photo',
 ])]
 class Artist extends Model
