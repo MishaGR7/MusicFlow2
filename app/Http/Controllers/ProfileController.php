@@ -3,21 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Models\Artist;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ProfileController extends Controller
 {
-    public function edit(Request $request): View
+    public function edit(Request $request): Response
     {
         $user = $request->user()->load([
             'favoriteArtists' => fn ($query) => $query->with(['albums' => fn ($albumQuery) => $albumQuery->latest()])->orderBy('name'),
             'notifications' => fn ($query) => $query->latest(),
         ]);
 
-        return view('profile.edit', compact('user'));
+        return Inertia::render('Profile/Edit', [
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'favorite_artists' => $user->favoriteArtists
+                    ->map(fn (Artist $artist) => [
+                        ...$this->artistData($artist),
+                        'albums_count' => $artist->albums->count(),
+                    ])
+                    ->values(),
+                'notifications' => $user->notifications
+                    ->map(fn ($notification) => $this->notificationData($notification))
+                    ->values(),
+                'unread_notifications_count' => $user->unreadNotifications()->count(),
+            ],
+        ]);
     }
 
     public function update(Request $request): RedirectResponse

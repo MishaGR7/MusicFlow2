@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Album;
 use App\Models\Artist;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 class PublicPagesTest extends TestCase
@@ -31,29 +32,44 @@ class PublicPagesTest extends TestCase
 
         $this->get('/')
             ->assertOk()
-            ->assertSee('MusicFlow')
-            ->assertSee($album->title)
-            ->assertSee($artist->name);
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Home', false)
+                ->has('latestAlbums', 1)
+                ->where('latestAlbums.0.title', $album->title)
+                ->where('featuredArtists.0.name', $artist->name)
+            );
 
         $this->get('/artists')
             ->assertOk()
-            ->assertSee($artist->name);
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Artists/Index', false)
+                ->where('artists.data.0.name', $artist->name)
+            );
 
         $this->get("/artists/{$artist->id}")
             ->assertOk()
-            ->assertSee($artist->name)
-            ->assertSee('Spotify')
-            ->assertSee('Instagram')
-            ->assertSee($album->title);
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Artists/Show', false)
+                ->where('artist.name', $artist->name)
+                ->where('artist.spotify_url', 'https://open.spotify.com/artist/ocean-echo')
+                ->where('artist.instagram_url', 'https://www.instagram.com/ocean.echo/')
+                ->where('artist.albums.0.title', $album->title)
+            );
 
         $this->get('/releases')
             ->assertOk()
-            ->assertSee($album->title);
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Albums/Index', false)
+                ->where('albums.data.0.title', $album->title)
+            );
 
         $this->get("/releases/{$album->id}")
             ->assertOk()
-            ->assertSee($album->title)
-            ->assertSee('Open on Spotify')
-            ->assertSee($artist->name);
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Albums/Show', false)
+                ->where('album.title', $album->title)
+                ->where('album.spotify_url', 'https://open.spotify.com/album/midnight-signal')
+                ->where('album.artist.name', $artist->name)
+            );
     }
 }

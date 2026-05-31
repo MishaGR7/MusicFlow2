@@ -4,16 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Models\Album;
 use App\Models\Artist;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class HomeController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
-        return view('home', [
-            'latestAlbums' => Album::with('artist')->withCount('tracks')->latest()->take(6)->get(),
-            'featuredArtists' => Artist::withCount(['albums', 'followers'])->orderBy('name')->take(6)->get(),
+        return Inertia::render('Home', [
+            'latestAlbums' => Album::with(['artist', 'titleTrack'])
+                ->withCount('tracks')
+                ->orderByDesc('release_date')
+                ->latest()
+                ->take(12)
+                ->get()
+                ->map(fn (Album $album) => $this->albumData($album)),
+            'featuredArtists' => Artist::withCount(['albums', 'followers'])
+                ->withMax('albums', 'release_date')
+                ->orderByDesc('albums_max_release_date')
+                ->orderBy('name')
+                ->take(12)
+                ->get()
+                ->map(fn (Artist $artist) => $this->artistData($artist)),
             'stats' => [
                 'albums' => Album::count(),
                 'artists' => Artist::count(),

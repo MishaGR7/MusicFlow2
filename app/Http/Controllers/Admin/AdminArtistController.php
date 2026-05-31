@@ -4,15 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Artist;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class AdminArtistController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
         $company = $request->string('company')->toString();
         $type = $request->string('type')->toString();
@@ -32,17 +33,17 @@ class AdminArtistController extends Controller
             ->orderBy('company')
             ->pluck('company');
 
-        return view('admin.artists.index', [
-            'artists' => $artists,
+        return Inertia::render('Admin/Artists/Index', [
+            'artists' => $this->paginationData($artists, fn (Artist $artist) => $this->artistData($artist)),
             'companies' => $companies,
             'types' => ['solo', 'group', 'band', 'duo', 'project'],
             'filters' => compact('company', 'type'),
         ]);
     }
 
-    public function create(): View
+    public function create(): Response
     {
-        return view('admin.artists.create');
+        return Inertia::render('Admin/Artists/Create');
     }
 
     public function store(Request $request): RedirectResponse
@@ -58,9 +59,11 @@ class AdminArtistController extends Controller
         return redirect()->route('admin.artists.index')->with('status', 'Artist created.');
     }
 
-    public function edit(Artist $artist): View
+    public function edit(Artist $artist): Response
     {
-        return view('admin.artists.edit', compact('artist'));
+        return Inertia::render('Admin/Artists/Edit', [
+            'artist' => $this->artistData($artist),
+        ]);
     }
 
     public function update(Request $request, Artist $artist): RedirectResponse

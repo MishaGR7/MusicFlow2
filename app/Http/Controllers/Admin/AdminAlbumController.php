@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Album;
 use App\Models\Artist;
 use App\Notifications\NewAlbumAdded;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,10 +13,12 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class AdminAlbumController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
         $search = $request->string('q')->toString();
         $status = $request->string('status')->toString();
@@ -41,19 +42,27 @@ class AdminAlbumController extends Controller
 
         $artists = Artist::orderBy('name')->get();
 
-        return view('admin.albums.index', [
-            'albums' => $albums,
-            'artists' => $artists,
+        return Inertia::render('Admin/Albums/Index', [
+            'albums' => $this->paginationData($albums, fn (Album $album) => $this->albumData($album)),
+            'artists' => $artists->map(fn (Artist $artist) => [
+                'id' => $artist->id,
+                'name' => $artist->name,
+            ]),
             'statuses' => ['published', 'announced', 'soon', 'tba'],
             'filters' => compact('search', 'status', 'artistId'),
         ]);
     }
 
-    public function create(): View
+    public function create(): Response
     {
         $artists = Artist::orderBy('name')->get();
 
-        return view('admin.albums.create', compact('artists'));
+        return Inertia::render('Admin/Albums/Create', [
+            'artists' => $artists->map(fn (Artist $artist) => [
+                'id' => $artist->id,
+                'name' => $artist->name,
+            ]),
+        ]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -86,12 +95,18 @@ class AdminAlbumController extends Controller
     /**
      * Display the specified resource.
      */
-    public function edit(Album $album): View
+    public function edit(Album $album): Response
     {
-        $album->load('tracks');
+        $album->load(['artist', 'tracks', 'titleTrack']);
         $artists = Artist::orderBy('name')->get();
 
-        return view('admin.albums.edit', compact('album', 'artists'));
+        return Inertia::render('Admin/Albums/Edit', [
+            'album' => $this->albumData($album, true),
+            'artists' => $artists->map(fn (Artist $artist) => [
+                'id' => $artist->id,
+                'name' => $artist->name,
+            ]),
+        ]);
     }
 
     public function update(Request $request, Album $album): RedirectResponse

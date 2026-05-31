@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Album;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class AlbumController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
         $status = $request->string('status')->toString();
         $country = $request->string('country')->toString();
@@ -46,19 +47,22 @@ class AlbumController extends Controller
             ->orderBy('artists.country')
             ->pluck('artists.country');
 
-        return view('albums.index', [
-            'albums' => $albums,
+        return Inertia::render('Albums/Index', [
+            'albums' => $this->paginationData($albums, fn (Album $album) => $this->albumData($album)),
             'favoriteArtistIds' => $favoriteArtistIds,
             'filters' => compact('status', 'country', 'search', 'onlyFavorites'),
             'countries' => $countries,
             'statuses' => ['published', 'announced', 'soon', 'tba'],
+            'canFilterFavorites' => $request->user() !== null,
         ]);
     }
 
-    public function show(Album $album): View
+    public function show(Album $album): Response
     {
-        $album->load(['artist', 'tracks']);
+        $album->load(['artist', 'tracks', 'titleTrack']);
 
-        return view('albums.show', compact('album'));
+        return Inertia::render('Albums/Show', [
+            'album' => $this->albumData($album, true),
+        ]);
     }
 }

@@ -16,7 +16,7 @@ Project Theme: Web platform for announcing releases of musical groups and artist
 
 *   **Framework:** Laravel (PHP 8.x)
 *   **Database:** SQLite
-*   **Frontend:** Blade Templates, JS, HTML5, CSS3
+*   **Frontend:** React, Inertia.js, Tailwind CSS, Vite
 *   **Tools:** Composer, NPM, Git
 
 ## 🚀 Quick Start

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Artist;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class FavoriteController extends Controller
 {
@@ -20,7 +21,7 @@ class FavoriteController extends Controller
         return back()->with('status', $message);
     }
 
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
         $favorites = $request->user()
             ->favoriteArtists()
@@ -28,6 +29,8 @@ class FavoriteController extends Controller
             ->latest('artist_user.created_at')
             ->get();
 
-        return view('favorites.index', compact('favorites'));
+        return Inertia::render('Favorites/Index', [
+            'favorites' => $favorites->map(fn (Artist $artist) => $this->artistData($artist, true)),
+        ]);
     }
 }

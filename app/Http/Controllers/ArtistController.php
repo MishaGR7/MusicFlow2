@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Artist;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ArtistController extends Controller
 {
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
         $search = $request->string('q')->toString();
         $country = $request->string('country')->toString();
@@ -46,8 +47,8 @@ class ArtistController extends Controller
             ->orderBy('company')
             ->pluck('company');
 
-        return view('artists.index', [
-            'artists' => $artists,
+        return Inertia::render('Artists/Index', [
+            'artists' => $this->paginationData($artists, fn (Artist $artist) => $this->artistData($artist)),
             'countries' => $countries,
             'companies' => $companies,
             'types' => ['solo', 'group', 'band', 'duo', 'project'],
@@ -55,13 +56,15 @@ class ArtistController extends Controller
         ]);
     }
 
-    public function show(Artist $artist): View
+    public function show(Artist $artist): Response
     {
         $artist->load([
             'albums' => fn ($query) => $query->withCount('tracks')->latest(),
             'followers',
         ]);
 
-        return view('artists.show', compact('artist'));
+        return Inertia::render('Artists/Show', [
+            'artist' => $this->artistData($artist, true),
+        ]);
     }
 }
