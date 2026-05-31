@@ -52,7 +52,7 @@ class AlbumController extends Controller
             'favoriteArtistIds' => $favoriteArtistIds,
             'filters' => compact('status', 'country', 'search', 'onlyFavorites'),
             'countries' => $countries,
-            'statuses' => ['published', 'announced', 'soon', 'tba'],
+            'statuses' => ['published', 'announced', 'tba'],
             'canFilterFavorites' => $request->user() !== null,
         ]);
     }

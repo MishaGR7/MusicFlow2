@@ -48,7 +48,7 @@ class AdminAlbumController extends Controller
                 'id' => $artist->id,
                 'name' => $artist->name,
             ]),
-            'statuses' => ['published', 'announced', 'soon', 'tba'],
+            'statuses' => ['published', 'announced', 'tba'],
             'filters' => compact('search', 'status', 'artistId'),
         ]);
     }
@@ -145,10 +145,9 @@ class AdminAlbumController extends Controller
     {
         $validated = $request->validate([
             'artist_id' => ['required', 'exists:artists,id'],
-            'title' => ['required', 'string', 'min:2', 'max:255'],
-            'status' => ['required', Rule::in(['published', 'announced', 'soon', 'tba'])],
+            'title' => ['nullable', 'string', 'min:2', 'max:255'],
+            'status' => ['nullable', Rule::in(['published', 'announced', 'tba'])],
             'release_year' => [
-                Rule::requiredIf(in_array($request->input('status'), ['published', 'announced'], true)),
                 'nullable',
                 'integer',
                 'min:1900',
@@ -169,6 +168,8 @@ class AdminAlbumController extends Controller
             'cover' => ['nullable', 'image', 'max:3072'],
             'spotify_url' => ['nullable', 'url', 'max:255'],
         ]);
+
+        $validated['status'] = $validated['status'] ?? 'tba';
 
         $year = isset($validated['release_year']) ? (int) $validated['release_year'] : null;
         $month = isset($validated['release_month']) ? (int) $validated['release_month'] : null;
@@ -214,7 +215,6 @@ class AdminAlbumController extends Controller
         $titleTrackIndex = isset($validated['title_track_index']) ? (int) $validated['title_track_index'] : null;
         $tracks = [];
         $position = 1;
-        $hasSelectedTitleTrack = false;
 
         foreach ($rawTracks as $index => $track) {
             $title = trim((string) ($track['title'] ?? ''));
@@ -224,7 +224,6 @@ class AdminAlbumController extends Controller
             }
 
             $isTitleTrack = $titleTrackIndex !== null && (int) $index === $titleTrackIndex;
-            $hasSelectedTitleTrack = $hasSelectedTitleTrack || $isTitleTrack;
 
             $tracks[] = [
                 'position' => $position++,
@@ -232,12 +231,6 @@ class AdminAlbumController extends Controller
                 'duration' => trim((string) ($track['duration'] ?? '')) ?: null,
                 'is_title_track' => $isTitleTrack,
             ];
-        }
-
-        if ($tracks !== [] && ! $hasSelectedTitleTrack) {
-            throw ValidationException::withMessages([
-                'title_track_index' => 'Select the title track for this album.',
-            ]);
         }
 
         return $tracks;

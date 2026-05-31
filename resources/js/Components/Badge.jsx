@@ -1,7 +1,6 @@
 const statusClasses = {
     published: 'music-badge-published',
     announced: 'music-badge-announced',
-    soon: 'music-badge-soon',
     tba: 'music-badge-tba',
 };
 

@@ -61,4 +61,18 @@ class AdminArtistDetailsTest extends TestCase
             ->assertSee('Visible Group')
             ->assertDontSee('Hidden Soloist');
     }
+
+    public function test_admin_artist_catalog_filters_by_artist_name(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        Artist::create(['name' => 'Neon Pulse']);
+        Artist::create(['name' => 'Quiet Archive']);
+
+        $this->actingAs($admin)
+            ->get('/admin/artists?q=Neon')
+            ->assertOk()
+            ->assertSee('Neon Pulse')
+            ->assertDontSee('Quiet Archive');
+    }
 }

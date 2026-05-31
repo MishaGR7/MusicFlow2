@@ -64,30 +64,33 @@ export default function Home({ latestAlbums = [], featuredArtists = [], stats = 
 
     return (
         <AppLayout title="Home">
-            <section className="mb-8 overflow-hidden rounded-lg border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-950 to-violet-950/80 p-8">
-                <p className="text-sm uppercase tracking-[0.3em] text-violet-300">MusicFlow</p>
-                <h1 className="mt-4 max-w-3xl text-4xl font-bold text-white md:text-5xl">Track releases, follow artists, and keep your music portfolio project polished.</h1>
-                <p className="mt-4 max-w-2xl text-base text-slate-300">Discover releases, browse artists, manage favorites, and keep profile settings in one place.</p>
-                <div className="mt-6 flex flex-wrap gap-3">
-                    <Button href="/releases" variant="primary"><Disc3 size={16} /> Releases</Button>
-                    <Button href="/artists"><Mic2 size={16} /> Artists</Button>
-                    {auth.user ? (
-                        <Button href="/profile"><UserPlus size={16} /> Open Profile</Button>
-                    ) : (
-                        <Button href="/register"><UserPlus size={16} /> Create Account</Button>
-                    )}
-                </div>
-                <div className="mt-8 grid gap-4 md:grid-cols-3">
-                    {[
-                        ['Artists', stats.artists],
-                        ['Releases', stats.albums],
-                        ['Published', stats.published],
-                    ].map(([label, value]) => (
-                        <div key={label} className="rounded-lg border border-slate-800 bg-black/20 p-4">
-                            <p className="text-sm text-slate-400">{label}</p>
-                            <p className="mt-2 text-3xl font-semibold text-white">{value}</p>
-                        </div>
-                    ))}
+            <section className="mb-8 overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-900/80 via-slate-950/80 to-violet-950/40 p-8 shadow-2xl shadow-black/50 backdrop-blur-md relative">
+                <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-violet-600/20 blur-[80px]" />
+                <div className="relative z-10">
+                    <p className="text-sm uppercase tracking-[0.3em] text-violet-400 font-semibold drop-shadow-sm">MusicFlow</p>
+                    <h1 className="mt-4 max-w-3xl text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 md:text-5xl leading-tight tracking-tight">Track releases, follow artists, and keep your music portfolio project polished.</h1>
+                    <p className="mt-4 max-w-2xl text-lg text-slate-300 leading-relaxed">Discover releases, browse artists, manage favorites, and keep profile settings in one place.</p>
+                    <div className="mt-8 flex flex-wrap gap-4">
+                        <Button href="/releases" variant="primary"><Disc3 size={18} /> Releases</Button>
+                        <Button href="/artists" variant="secondary"><Mic2 size={18} /> Artists</Button>
+                        {auth.user ? (
+                            <Button href="/profile" variant="secondary"><UserPlus size={18} /> Open Profile</Button>
+                        ) : (
+                            <Button href="/register" variant="secondary"><UserPlus size={18} /> Create Account</Button>
+                        )}
+                    </div>
+                    <div className="mt-10 grid gap-4 md:grid-cols-3">
+                        {[
+                            ['Artists', stats.artists],
+                            ['Releases', stats.albums],
+                            ['Published', stats.published],
+                        ].map(([label, value]) => (
+                            <div key={label} className="rounded-xl border border-white/5 bg-white/5 p-5 backdrop-blur-sm shadow-inner transition-transform hover:scale-[1.02] hover:bg-white/10">
+                                <p className="text-sm font-medium text-slate-400 uppercase tracking-wider">{label}</p>
+                                <p className="mt-2 text-4xl font-bold text-white drop-shadow-md">{value}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </section>
 

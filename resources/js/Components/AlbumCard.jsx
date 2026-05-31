@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { Disc3 } from 'lucide-react';
+import AlbumCover from './AlbumCover';
 import Badge from './Badge';
 import Button from './Button';
 import TrackCount from './TrackCount';
@@ -7,7 +8,7 @@ import TrackCount from './TrackCount';
 export default function AlbumCard({ album, compact = false, className = '' }) {
     return (
         <article className={`music-card ${className}`.trim()}>
-            <img src={album.cover_url} alt={album.title} className={`${compact ? 'h-48' : 'h-56'} w-full rounded-lg object-cover`} />
+            <AlbumCover album={album} className={`${compact ? 'h-48' : 'h-56'} w-full rounded-lg object-cover`} />
             <div className="mt-4 flex items-start justify-between gap-4">
                 <div>
                     <h2 className="text-xl font-semibold text-white">{album.title}</h2>

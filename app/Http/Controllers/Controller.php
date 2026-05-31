@@ -50,7 +50,7 @@ abstract class Controller
             'release_day' => $album->release_day,
             'release_label' => $album->release_label,
             'status' => $album->status,
-            'cover_url' => $album->cover ? asset('storage/'.$album->cover) : 'https://placehold.co/800x800/0f172a/a78bfa?text=MusicFlow',
+            'cover_url' => $album->cover ? asset('storage/'.$album->cover) : null,
             'spotify_url' => $album->spotify_url,
             'tracks_count' => $album->tracks_count ?? ($album->relationLoaded('tracks') ? $album->tracks->count() : $album->tracks()->count()),
             'title_track' => $album->relationLoaded('titleTrack') && $album->titleTrack ? $this->trackData($album->titleTrack) : null,

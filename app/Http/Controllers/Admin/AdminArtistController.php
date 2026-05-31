@@ -15,11 +15,13 @@ class AdminArtistController extends Controller
 {
     public function index(Request $request): Response
     {
+        $search = $request->string('q')->toString();
         $company = $request->string('company')->toString();
         $type = $request->string('type')->toString();
 
         $artists = Artist::query()
             ->withCount(['albums', 'followers'])
+            ->when($search, fn ($query) => $query->where('name', 'like', "%{$search}%"))
             ->when($company, fn ($query) => $query->where('company', $company))
             ->when($type, fn ($query) => $query->where('artist_type', $type))
             ->latest()
@@ -37,7 +39,7 @@ class AdminArtistController extends Controller
             'artists' => $this->paginationData($artists, fn (Artist $artist) => $this->artistData($artist)),
             'companies' => $companies,
             'types' => ['solo', 'group', 'band', 'duo', 'project'],
-            'filters' => compact('company', 'type'),
+            'filters' => compact('search', 'company', 'type'),
         ]);
     }
 

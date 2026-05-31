@@ -52,14 +52,14 @@ export default function AlbumForm({ data, setData, errors, processing, artists =
                     <option value="">Select artist</option>
                     {artists.map((artist) => <option key={artist.id} value={artist.id}>{artist.name}</option>)}
                 </Select>
-                <Input value={data.title} onChange={(e) => setData('title', e.target.value)} placeholder="Album title" minLength="2" required error={errors.title} />
+                <Input value={data.title} onChange={(e) => setData('title', e.target.value)} placeholder="Album title" minLength="2" error={errors.title} />
                 <div className="grid gap-4 md:col-span-2 md:grid-cols-3">
                     <Input type="number" value={data.release_year} onChange={(e) => setData('release_year', e.target.value)} placeholder="Year (e.g. 2026)" min="1900" max="2100" error={errors.release_year} />
                     <Input type="number" value={data.release_month} onChange={(e) => setData('release_month', e.target.value)} placeholder="Month (1-12)" min="1" max="12" error={errors.release_month} />
                     <Input type="number" value={data.release_day} onChange={(e) => setData('release_day', e.target.value)} placeholder="Day (1-31)" min="1" max="31" error={errors.release_day} />
                 </div>
-                <Select value={data.status} onChange={(e) => setData('status', e.target.value)} required error={errors.status}>
-                    {['published', 'announced', 'soon', 'tba'].map((status) => <option key={status} value={status}>{status[0].toUpperCase() + status.slice(1)}</option>)}
+                <Select value={data.status} onChange={(e) => setData('status', e.target.value)} error={errors.status}>
+                    {['published', 'announced', 'tba'].map((status) => <option key={status} value={status}>{status[0].toUpperCase() + status.slice(1)}</option>)}
                 </Select>
                 <Input className="md:col-span-2" type="url" value={data.spotify_url} onChange={(e) => setData('spotify_url', e.target.value)} placeholder="Spotify album URL https://open.spotify.com/album/..." error={errors.spotify_url} />
                 <Input className="md:col-span-2" type="file" accept="image/*" onChange={(e) => setData('cover', e.target.files[0])} error={errors.cover} />
@@ -69,7 +69,7 @@ export default function AlbumForm({ data, setData, errors, processing, artists =
                 <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
                     <div>
                         <h2 className="text-lg font-semibold text-white">Track list</h2>
-                        <p className="text-sm text-slate-400">Set the number of tracks, then fill titles and mark the title track.</p>
+                        <p className="text-sm text-slate-400">Set the number of tracks, then fill titles and optionally mark the title track.</p>
                     </div>
                     <div className="flex flex-wrap items-end gap-3">
                         <Input

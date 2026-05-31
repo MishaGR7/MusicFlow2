@@ -1,5 +1,6 @@
 import { router, useForm } from '@inertiajs/react';
 import { Edit, Filter, Plus, RotateCcw, Trash2 } from 'lucide-react';
+import AlbumCover from '../../../Components/AlbumCover';
 import Badge from '../../../Components/Badge';
 import Button from '../../../Components/Button';
 import EmptyState from '../../../Components/EmptyState';
@@ -49,7 +50,7 @@ export default function Index({ albums, artists = [], statuses = [], filters = {
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {albums.data.length ? albums.data.map((album) => (
                     <article key={album.id} className="music-card">
-                        <img src={album.cover_url} className="h-48 w-full rounded-lg object-cover" alt={album.title || 'Untitled Album'} />
+                        <AlbumCover album={album} className="h-48 w-full rounded-lg object-cover" />
                         <div className="mt-3 flex items-start justify-between gap-3">
                             <div>
                                 <h2 className="text-xl font-semibold text-white">{album.title || 'Untitled Album'}</h2>

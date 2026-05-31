@@ -68,7 +68,6 @@ class Album extends Model
     {
         return $this->formatted_release_date
             ?? match ($this->status) {
-                'soon' => 'Coming Soon',
                 'announced' => 'Announced',
                 default => 'TBA',
             };

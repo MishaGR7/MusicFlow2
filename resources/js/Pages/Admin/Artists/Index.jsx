@@ -2,12 +2,13 @@ import { router, useForm } from '@inertiajs/react';
 import { Edit, Filter, Plus, RotateCcw, Trash2 } from 'lucide-react';
 import Button from '../../../Components/Button';
 import EmptyState from '../../../Components/EmptyState';
-import { Select } from '../../../Components/Form';
+import { Input, Select } from '../../../Components/Form';
 import Pagination from '../../../Components/Pagination';
 import AppLayout from '../../../Layouts/AppLayout';
 
 export default function Index({ artists, companies = [], types = [], filters = {} }) {
     const { data, setData, get } = useForm({
+        q: filters.search || '',
         company: filters.company || '',
         type: filters.type || '',
     });
@@ -30,7 +31,8 @@ export default function Index({ artists, companies = [], types = [], filters = {
                 <Button href="/admin/artists/create" variant="primary"><Plus size={16} /> Add artist</Button>
             </div>
             <form onSubmit={submit} className="mb-6 grid gap-4 rounded-lg border border-slate-800 bg-slate-900/70 p-4 md:grid-cols-4">
-                <Select className="md:col-span-2" value={data.company} onChange={(e) => setData('company', e.target.value)}>
+                <Input className="md:col-span-2" value={data.q} onChange={(e) => setData('q', e.target.value)} placeholder="Search by artist name" />
+                <Select value={data.company} onChange={(e) => setData('company', e.target.value)}>
                     <option value="">All companies</option>
                     {companies.map((company) => <option key={company} value={company}>{company}</option>)}
                 </Select>
@@ -38,7 +40,7 @@ export default function Index({ artists, companies = [], types = [], filters = {
                     <option value="">All types</option>
                     {types.map((type) => <option key={type} value={type}>{type[0].toUpperCase() + type.slice(1)}</option>)}
                 </Select>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3 md:col-span-4">
                     <Button type="submit" variant="primary"><Filter size={16} /> Filter</Button>
                     <Button href="/admin/artists"><RotateCcw size={16} /> Reset</Button>
                 </div>

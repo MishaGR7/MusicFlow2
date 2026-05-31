@@ -61,6 +61,28 @@ class AdminAlbumWorkflowTest extends TestCase
         Notification::assertSentTo($listener, NewAlbumAdded::class);
     }
 
+    public function test_admin_can_create_album_with_only_artist_selected(): void
+    {
+        Notification::fake();
+
+        $admin = User::factory()->create(['role' => 'admin']);
+        $artist = Artist::create(['name' => 'Minimal Signal']);
+
+        $this->actingAs($admin)
+            ->post('/admin/albums', [
+                'artist_id' => $artist->id,
+            ])
+            ->assertRedirect('/admin/albums');
+
+        $this->assertDatabaseHas('albums', [
+            'artist_id' => $artist->id,
+            'title' => null,
+            'release_date' => null,
+            'status' => 'tba',
+        ]);
+    }
+
+
     public function test_admin_can_add_tracks_and_select_title_track(): void
     {
         $admin = User::factory()->create(['role' => 'admin']);
@@ -93,7 +115,7 @@ class AdminAlbumWorkflowTest extends TestCase
         ]);
     }
 
-    public function test_admin_must_select_title_track_when_tracks_are_added(): void
+    public function test_admin_can_add_tracks_without_selecting_title_track(): void
     {
         $admin = User::factory()->create(['role' => 'admin']);
         $artist = Artist::create(['name' => 'Clear Tone']);
@@ -102,15 +124,19 @@ class AdminAlbumWorkflowTest extends TestCase
             ->post('/admin/albums', [
                 'artist_id' => $artist->id,
                 'title' => 'Missing Single',
-                'status' => 'soon',
+                'status' => 'tba',
                 'tracks' => [
                     ['title' => 'Untitled Track', 'duration' => '3:00'],
                 ],
             ])
-            ->assertSessionHasErrors(['title_track_index']);
+            ->assertRedirect('/admin/albums');
 
-        $this->assertDatabaseCount('albums', 0);
-        $this->assertDatabaseCount('album_tracks', 0);
+        $this->assertDatabaseCount('albums', 1);
+        $this->assertDatabaseHas('album_tracks', [
+            'title' => 'Untitled Track',
+            'duration' => '3:00',
+            'is_title_track' => false,
+        ]);
     }
 
     public function test_admin_can_filter_albums_by_search_status_and_artist(): void

@@ -50,13 +50,13 @@ class ProfileFeaturesTest extends TestCase
         $favoriteAlbum = Album::create([
             'artist_id' => $favoriteArtist->id,
             'title' => 'Favorite Release',
-            'status' => 'soon',
+            'status' => 'tba',
         ]);
 
         Album::create([
             'artist_id' => $otherArtist->id,
             'title' => 'Hidden Release',
-            'status' => 'soon',
+            'status' => 'tba',
         ]);
 
         $user->favoriteArtists()->attach($favoriteArtist->id);
